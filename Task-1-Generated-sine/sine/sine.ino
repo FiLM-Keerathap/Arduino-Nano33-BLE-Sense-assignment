@@ -2,6 +2,7 @@
 input ค่า 0- 2pi
 model  สร้าง sine function
 
+
 */
 
 // Import TensorFlow stuff
@@ -17,30 +18,33 @@ model  สร้าง sine function
 
 // Figure out what's going on in our model
 #define DEBUG 1
-const int kInferencesPerCycle = 1024; //จำนวน samples
-const float Pi = 2.f * 3.14159265359f;// ค่า 2pi
+const int kInferencesPerCycle = 1024;  //จำนวน samples
+const float Pi = 2.f * 3.14159265359f; // ค่า 2pi
 // TFLite globals, used for compatibility with Arduino-style sketches
 /*ตัวแปร globles ที่ให้tflite เข้าถึงได้*/
-namespace {
-  tflite::ErrorReporter* error_reporter = nullptr;
-  const tflite::Model* model = nullptr;
-  tflite::MicroInterpreter* interpreter = nullptr;
-  TfLiteTensor* model_input = nullptr;
-  TfLiteTensor* model_output = nullptr;
-  int i =0;
-  
+namespace
+{
+  tflite::ErrorReporter *error_reporter = nullptr;
+  const tflite::Model *model = nullptr;
+  tflite::MicroInterpreter *interpreter = nullptr;
+  TfLiteTensor *model_input = nullptr;
+  TfLiteTensor *model_output = nullptr;
+  int i = 0;
+
   // Create an area of memory to use for input, output, and other TensorFlow
   // arrays. You'll need to adjust this by combiling, running, and looking
   // for errors.
   /*จองพท.ให้ Tflite*/
-  constexpr int kTensorArenaSize = 2 * 1024;//ประมาณ 2k
+  constexpr int kTensorArenaSize = 2 * 1024; //ประมาณ 2k
   uint8_t tensor_arena[kTensorArenaSize];
 } // namespace
 
-void setup() {
-  #if DEBUG
-  while(!Serial);
-  #endif
+void setup()
+{
+#if DEBUG
+  while (!Serial)
+    ;
+#endif
 
   // Set up logging (will report to Serial, even within TFLite functions)
   static tflite::MicroErrorReporter micro_error_reporter;
@@ -51,9 +55,11 @@ void setup() {
   /*แปลงโมเดลเป็น structure ของบอรืด*/
   model = tflite::GetModel(sine_model);
   /*check ว่าบอร์ดใช้ได้ไหม*/
-  if (model->version() != TFLITE_SCHEMA_VERSION) {
+  if (model->version() != TFLITE_SCHEMA_VERSION)
+  {
     error_reporter->Report("Model version does not match Schema");
-    while(1);
+    while (1)
+      ;
   }
 
   static tflite::AllOpsResolver resolver;
@@ -61,48 +67,49 @@ void setup() {
   // Build an interpreter to run the model
   /*สร้างตัวล่าม*/
   static tflite::MicroInterpreter static_interpreter(
-    model, resolver, tensor_arena, kTensorArenaSize, error_reporter);
+      model, resolver, tensor_arena, kTensorArenaSize, error_reporter);
   interpreter = &static_interpreter;
-  
+
   // Allocate memory from the tensor_arena for the model's tensors
   TfLiteStatus allocate_status = interpreter->AllocateTensors();
-  if (allocate_status != kTfLiteOk) {
+  if (allocate_status != kTfLiteOk)
+  {
     error_reporter->Report("AllocateTensors() failed");
-    while(1);
+    while (1)
+      ;
   }
   /*ต่อ ตัวแปรเข้ากับ buffers (แปลงเป็น tensor)*/
   // Assign model input and output buffers (tensors) to pointers
   model_input = interpreter->input(0);
   model_output = interpreter->output(0);
-
-
 }
 
-void loop() {
-  unsigned long time_start,time_end;
+void loop()
+{
+  unsigned long time_start, time_end;
   time_start = micros();
   float position = static_cast<float>(i) /
                    static_cast<float>(kInferencesPerCycle);
   // Copy value to input buffer (tensor)
-  float x_val = Pi*position; /* ตัวแปร x เป็น 2Pi*(i/1024) โดยที่ i =0,1,2,...,1023 */
-  model_input->data.f[0] = x_val;/* ตอนนี้ model = sine( )*/
+  float x_val = Pi * position;    /* ตัวแปร x เป็น 2Pi*(i/1024) โดยที่ i =0,1,2,...,1023 */
+  model_input->data.f[0] = x_val; /* ตอนนี้ model = sine( )*/
 
-  
   TfLiteStatus invoke_status = interpreter->Invoke();
-  if (invoke_status != kTfLiteOk) {
+  if (invoke_status != kTfLiteOk)
+  {
     error_reporter->Report("Invoke failed on input: %f\n", x_val);
     return;
   }
-  
-  /* อ่าน ค่า y จาก buffer output ของ model*/ 
-  float y_val = model_output->data.f[0]; 
+
+  /* อ่าน ค่า y จาก buffer output ของ model*/
+  float y_val = model_output->data.f[0];
   // Print value
-  Serial.println(10*y_val);/* คูณ gain*/
+  Serial.println(10 * y_val); /* คูณ gain*/
   //delay(50);
   i++; /*i นับไปเรื่อยๆ*/
-  if (i >= kInferencesPerCycle) i = 0;/*กันค่า i overflow เมื่อ i >= 1024 ให้รีเซ็ทค่า i*/
+  if (i >= kInferencesPerCycle)
+    i = 0; /*กันค่า i overflow เมื่อ i >= 1024 ให้รีเซ็ทค่า i*/
   time_end = micros();
-  Serial.print((float)(time_end - time_start)/1000);
+  Serial.print((float)(time_end - time_start) / 1000);
   Serial.println("us");
-
 }
