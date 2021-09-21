@@ -1,0 +1,1 @@
+![result](Task-2-Autoencoder\autoencoder-model\img\result.png)
