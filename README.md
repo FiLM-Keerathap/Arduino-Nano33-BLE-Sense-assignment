@@ -23,5 +23,4 @@ for visualizing your  neural network, deep learning and machine learning models
 
 ## [Task--2-Anomaly-detection](Task-2-Autoencoder)
 <p>
- เขียนโมเดลสำหรับตรวจจับความผิดปกติของข้อมูล โดยใช้ชุดข้อมูลจากโฟล์เดอร์ [data](data)
-</p> 
+ เขียนโมเดลสำหรับตรวจจับความผิดปกติของข้อมูล โดยใช้ชุดข้อมูลจากโฟล์เดอร์ [data](data)</p> [data](data)
