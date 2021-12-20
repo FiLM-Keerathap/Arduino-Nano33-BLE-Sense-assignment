@@ -12,15 +12,11 @@ for visualizing your  neural network, deep learning and machine learning models
 </p>
 
 ## [Task-1-Generated-sine](Task-1-Generated-sine)
-
-<p>
  เขียนโมเดลสร้างสัญญาณไซน์ โดยอินพุตจะเป็นค่า [ 0.0, 2π ] และมีเอาต์พุตที่เป็นไปได้คือ [ -1.0, 1.0 ]
-</p>
 
 1. sine <p> ใช้ Converter แบบ DEFAULT จะเป็นการแปลงรุ่นแบบเริ่มต้น โมเดลจะทำงานด้วยพารามิเตอร์ float32</p>
 2. sine_quantize <p> ใช้ CONVERTER แบบ Post-training integer quantization ทำการแปลงรุ่นโมเดลให้ทำงานด้วยตัวแปร int_8</p>
 
 
 ## [Task--2-Anomaly-detection](Task-2-Autoencoder)
-<p>
- เขียนโมเดลสำหรับตรวจจับความผิดปกติของข้อมูล โดยใช้ชุดข้อมูลจากโฟล์เดอร์</p> [data](data)
+ เขียนโมเดลสำหรับตรวจจับความผิดปกติของข้อมูล โดยใช้ชุดข้อมูลจากโฟล์เดอร์ [data](data)
