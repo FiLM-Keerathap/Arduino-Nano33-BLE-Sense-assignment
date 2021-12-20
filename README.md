@@ -20,3 +20,10 @@ for visualizing your  neural network, deep learning and machine learning models
 
 ## [Task--2-Anomaly-detection](Task-2-Autoencoder)
  เขียนโมเดลสำหรับตรวจจับความผิดปกติของข้อมูล โดยใช้ชุดข้อมูลจากโฟล์เดอร์ [data](data)
+
+1. [Autoencoder-model](Task-2-Anomaly-detect\autoencoder-model)
+
+2. [Conv2D-autoencoder-model](Task-2-Anomaly-detect\Conv2D-autoencoder-model)
+
+3. [LSTM-autoencoder-model](Task-2-Anomaly-detect\LSTM-autoencoder-model)
+
